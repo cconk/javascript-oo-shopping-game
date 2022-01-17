@@ -1,23 +1,72 @@
 let gameComplete = false;
 // Define the three constants here
-
+const name = "unknown";
+const score = 0;
+const items = 0;
 // Define the player object here
+const player = {
+    name,
+    score, 
+    items,
 
+    getCurrentScore() {
+        return this.score;
+    },
+
+    addPoints(points) {
+        this.score = this.score+points;
+    },
+
+    deductPoints(points) {
+        this.score = this.score-points
+    }
+}
 // Define the Product class - write the Constructor function for Product class here
-
+const Product = {
+    constructor(id, name, price, expiryDate) {
+        this.id = id,
+        this.name = name,
+        this.price = price,
+        this.expiryDate = expiryDate
+    }
+}
 // Complete the dateDiff function
-const dateDiff = (date1, date2) => {};
+const dateDiff = (date1, date2) => {
+    const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+    const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+    return Math.floor((utc2-utc1)/ (1000*60*60*24));
+
+};
 
 // Here, use Object.defineProperty to create property - daysToExpire
-
+Object.defineProperty(Product.prototype, 'daysToExpire', {
+    get() {return 'this will be days to expire'}
+}) 
 // Add method getDetails to Product here
-
+Object.defineProperty(Product.prototype, 'getDetails', {
+    getDetails() {return `Product Name: ${this.name} , Product Price: ${this.price}`}
+})
 // Define the MagicProduct class here
+const MagicProduct = (id, name, price, expiryDate, points, isBonus) => {
+    Product.call(this, id, name, price, expiryDate);
+    this.points = points;
+    this.isBonus = bonus;
+} 
 
 // Establish inheritance between Product() & MagicProduct() here
-
+MagicProduct.prototype = Object.create(Product.prototype);
 // Define Rating class here
+class Rating {
+    constructor() {
+        this.rating = "";
+    }
 
+    rainging(value) {
+        (value > 1 && value <=4) ? this.rating="Ok": this.rating="";
+        (value >=5 && value <=7) ? this.rating="Good": this.rating="";
+        (value > 7) ? this.rating="Exceptional": this.rating="";
+    }
+}
 // Complete the loadProducts function
 const loadProducts = (map, prodId) => {
     let a = new Array();
