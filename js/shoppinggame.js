@@ -22,35 +22,42 @@ const player = {
     }
 }
 // Define the Product class - write the Constructor function for Product class here
-const Product = {
-    constructor(id, name, price, expiryDate) {
-        this.id = id,
-        this.name = name,
-        this.price = price,
-        this.expiryDate = expiryDate
-    }
+function Product(id, name, price, expiryDate) {
+    
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.expiryDate = expiryDate;
 }
 // Complete the dateDiff function
-const dateDiff = (date1, date2) => {
-    const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
-    const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
-    return Math.floor((utc2-utc1)/ (1000*60*60*24));
-
+function dateDiff(date1, date2) {
+    if (date1.getDay() > date2.getDay()) {
+        return date1.getDay() - date2.getDay();
+    } else if (date2.getDay() > date1.getDay()) {
+        return date2.getDay() - date1.getDay();
+    } else if (date1.getDay() === date2.getDay()) {
+        return 0;
+    }
+    // const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+    // const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+    // return Math.floor((utc2-utc1)/ (1000*60*60*24));
 };
 
 // Here, use Object.defineProperty to create property - daysToExpire
-Object.defineProperty(Product.prototype, 'daysToExpire', {
-    get() {return 'this will be days to expire'}
+Object.defineProperty(Product.prototype, "daysToExpire", {
+    get: function() {
+        return dateDiff(this.expiryDate, new Date() );
+    }
 }) 
 // Add method getDetails to Product here
-Object.defineProperty(Product.prototype, 'getDetails', {
-    getDetails() {return `Product Name: ${this.name} , Product Price: ${this.price}`}
-})
+Product.prototype.getDetails = function() {
+    return `Product Name: ${this.name} , Product Price: ${this.price}`;
+}
 // Define the MagicProduct class here
-const MagicProduct = (id, name, price, expiryDate, points, isBonus) => {
+function MagicProduct(id, name, price, expiryDate, points, isBonus) {
     Product.call(this, id, name, price, expiryDate);
     this.points = points;
-    this.isBonus = bonus;
+    this.isBonus = isBonus;
 } 
 
 // Establish inheritance between Product() & MagicProduct() here
@@ -58,13 +65,19 @@ MagicProduct.prototype = Object.create(Product.prototype);
 // Define Rating class here
 class Rating {
     constructor() {
-        this.rating = "";
+        this.rate = "";
     }
 
-    rainging(value) {
-        (value > 1 && value <=4) ? this.rating="Ok": this.rating="";
-        (value >=5 && value <=7) ? this.rating="Good": this.rating="";
-        (value > 7) ? this.rating="Exceptional": this.rating="";
+    set rating(value) {
+        if(value > 1 && value <=4) {
+            this.rate = "OK";
+        } else if(value >=5 && value <=7) {
+            this.rate = "GOOD"
+        } else if(value > 7) {
+            this.rate = "EXCEPTIONAL"
+        } else {
+            this.rate = "BAD"
+        }
     }
 }
 // Complete the loadProducts function
@@ -367,6 +380,7 @@ function init(data) {
 
 
 
+const { get } = require("http");
     ///////////////////////////////////////////////////////////////
     const readline = require("readline");
     require('colors');
