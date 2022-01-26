@@ -5,20 +5,20 @@ const score = 0;
 const items = 0;
 // Define the player object here
 const player = {
-    name,
-    score, 
-    items,
+    name: name,
+    score: score, 
+    items: items,
 
     getCurrentScore() {
         return this.score;
     },
 
     addPoints(points) {
-        this.score = this.score+points;
+        this.score += points;
     },
 
     deductPoints(points) {
-        this.score = this.score-points
+        this.score -= points;
     }
 }
 // Define the Product class - write the Constructor function for Product class here
@@ -31,16 +31,16 @@ function Product(id, name, price, expiryDate) {
 }
 // Complete the dateDiff function
 function dateDiff(date1, date2) {
-    if (date1.getDay() > date2.getDay()) {
-        return date1.getDay() - date2.getDay();
-    } else if (date2.getDay() > date1.getDay()) {
-        return date2.getDay() - date1.getDay();
-    } else if (date1.getDay() === date2.getDay()) {
-        return 0;
-    }
-    // const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
-    // const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
-    // return Math.floor((utc2-utc1)/ (1000*60*60*24));
+    // if (date1.getDay() > date2.getDay()) {
+    //     return date1.getDay() - date2.getDay();
+    // } else if (date2.getDay() > date1.getDay()) {
+    //     return date2.getDay() - date1.getDay();
+    // } else if (date1.getDay() === date2.getDay()) {
+    //     return 0;
+    // }
+    const utc1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+    const utc2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+    return Math.floor((utc2-utc1)/ (1000*60*60*24))*-1;
 };
 
 // Here, use Object.defineProperty to create property - daysToExpire
@@ -242,7 +242,9 @@ const getProduct = (prodList, pId) => {
 
 
 // Complete this function
-const calculateBill = (prod, tBill) => {};
+const calculateBill = (prod, tBill) => {
+    return prod.price + tBill;
+};
 
 const findPointsToBill = (roundedTotal) => {
     if (roundedTotal > 10 && roundedTotal <= 100) {
@@ -264,12 +266,22 @@ const findPointsToBill = (roundedTotal) => {
 
 
 // Complete this function
-const findPointsForExpDate = (prod) => {};
+const findPointsForExpDate = (prod) => {
+    return prod.daysToExpire < 30 ? 10 : 0;
+};
 
 
 const calculatePoints = (prod, tBill) => {
     let pointsToBill = findPointsToBill(Math.round(tBill));
     let pointsForExpDate = findPointsForExpDate(prod);
+    player.score = player.score + pointsToBill + pointsForExpDate;
+    if(prod instanceof MagicProduct) {
+        if(prod.isBonus) {
+            player.addPoints(prod.points);
+        } else {
+            player.deductPoints(prod.points);
+        }
+    }
 };
 
 // Complete this function
